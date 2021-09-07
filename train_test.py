@@ -93,9 +93,9 @@ def train_epoch(models, method, criterion, optimizers, dataloaders, epoch, epoch
 
             pred_loss = models['module'](features)
             pred_loss = pred_loss.view(pred_loss.size(0))
-            #m_module_loss   = LossPredLoss(pred_loss, target_loss, margin=MARGIN)
-            loss_mse = torch.nn.MSELoss()
-            m_module_loss   = loss_mse(pred_loss, target_loss)/1
+            m_module_loss   = LossPredLoss(pred_loss, target_loss, margin=MARGIN)
+            #loss_mse = torch.nn.MSELoss()
+            #m_module_loss   = loss_mse(pred_loss, target_loss)/1
             m_backbone_loss = torch.sum(target_loss) / target_loss.size(0)        
             loss            = m_backbone_loss + WEIGHT * m_module_loss 
         else:
