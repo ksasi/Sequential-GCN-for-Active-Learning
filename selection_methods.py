@@ -2,6 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+from torch.distributions import Categorical
 import torch.optim as optim
 # Custom
 from config import *
@@ -176,7 +177,7 @@ def get_entropy(models, unlabeled_loader):
             with torch.cuda.device(CUDA_VISIBLE_DEVICES):
                 inputs = inputs.cuda()
             _, outf, features = models['backbone'](inputs)
-            entropy = outf.entropy()
+            entropy = Categorical(probs = outf).entropy()
             entropy = entropy.view(entropy.size(0))
             uncertainty = torch.cat((uncertainty, entropy), 0)
     
