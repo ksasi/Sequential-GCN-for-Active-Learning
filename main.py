@@ -52,12 +52,12 @@ args = parser.parse_args()
 if __name__ == '__main__':
 
     method = args.method_type
-    methods = ['Random', 'UncertainGCN', 'CoreGCN', 'CoreSet', 'lloss','VAAL']
+    methods = ['Random', 'UncertainGCN', 'CoreGCN', 'CoreSet', 'lloss','VAAL','lloss_mse','entropy']
     datasets = ['cifar10', 'cifar100', 'fashionmnist','svhn']
     assert method in methods, 'No method %s! Try options %s'%(method, methods)
     assert args.dataset in datasets, 'No dataset %s! Try options %s'%(args.dataset, datasets)
     '''
-    method_type: 'Random', 'UncertainGCN', 'CoreGCN', 'CoreSet', 'lloss','VAAL'
+    method_type: 'Random', 'UncertainGCN', 'CoreGCN', 'CoreSet', 'lloss','VAAL','lloss_mse'
     '''
     results = open('results_'+str(args.method_type)+"_"+args.dataset +'_main'+str(args.cycles)+str(args.total)+'.txt','w')
     print("Dataset: %s"%args.dataset)
@@ -102,7 +102,7 @@ if __name__ == '__main__':
                 else:
                     #resnet18    = vgg11().cuda() 
                     resnet18    = resnet.ResNet18(num_classes=NO_CLASSES).cuda()
-                if method == 'lloss':
+                if method == 'lloss' or method == 'lloss_mse':
                     #loss_module = LossNet(feature_sizes=[16,8,4,2], num_channels=[128,128,256,512]).cuda()
                     loss_module = LossNet().cuda()
 
@@ -119,7 +119,7 @@ if __name__ == '__main__':
             sched_backbone = lr_scheduler.MultiStepLR(optim_backbone, milestones=MILESTONES)
             optimizers = {'backbone': optim_backbone}
             schedulers = {'backbone': sched_backbone}
-            if method == 'lloss':
+            if method == 'lloss' or method == 'lloss_mse':
                 optim_module   = optim.SGD(models['module'].parameters(), lr=LR, 
                     momentum=MOMENTUM, weight_decay=WDECAY)
                 sched_module   = lr_scheduler.MultiStepLR(optim_module, milestones=MILESTONES)

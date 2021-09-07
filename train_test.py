@@ -31,7 +31,7 @@ def LossPredLoss(input, target, margin=1.0, reduction='mean'):
 def test(models, epoch, method, dataloaders, mode='val'):
     assert mode == 'val' or mode == 'test'
     models['backbone'].eval()
-    if method == 'lloss':
+    if method == 'lloss' or method == 'lloss_mse':
         models['module'].eval()
     
     total = 0
@@ -55,7 +55,7 @@ def train_epoch(models, method, criterion, optimizers, dataloaders, epoch, epoch
 
 
     models['backbone'].train()
-    if method == 'lloss':
+    if method == 'lloss' or method == 'lloss_mse':
         models['module'].train()
     global iters
     for data in tqdm(dataloaders['train'], leave=False, total=len(dataloaders['train'])):
@@ -66,7 +66,7 @@ def train_epoch(models, method, criterion, optimizers, dataloaders, epoch, epoch
         iters += 1
 
         optimizers['backbone'].zero_grad()
-        if method == 'lloss':
+        if method == 'lloss' or method == 'lloss_mse':
             optimizers['module'].zero_grad()
 
         scores, _, features = models['backbone'](inputs) 
@@ -84,13 +84,27 @@ def train_epoch(models, method, criterion, optimizers, dataloaders, epoch, epoch
             m_module_loss   = LossPredLoss(pred_loss, target_loss, margin=MARGIN)
             m_backbone_loss = torch.sum(target_loss) / target_loss.size(0)        
             loss            = m_backbone_loss + WEIGHT * m_module_loss 
+        elif method == 'lloss_mse':
+            if epoch > epoch_loss:
+                features[0] = features[0].detach()
+                features[1] = features[1].detach()
+                features[2] = features[2].detach()
+                features[3] = features[3].detach()
+
+            pred_loss = models['module'](features)
+            pred_loss = pred_loss.view(pred_loss.size(0))
+            #m_module_loss   = LossPredLoss(pred_loss, target_loss, margin=MARGIN)
+            loss_mse = torch.nn.MSELoss()
+            m_module_loss   = loss_mse(pred_loss, target_loss)
+            m_backbone_loss = torch.sum(target_loss) / target_loss.size(0)        
+            loss            = m_backbone_loss + WEIGHT * m_module_loss 
         else:
             m_backbone_loss = torch.sum(target_loss) / target_loss.size(0)        
             loss            = m_backbone_loss
 
         loss.backward()
         optimizers['backbone'].step()
-        if method == 'lloss':
+        if method == 'lloss' or method == 'lloss_mse':
             optimizers['module'].step()
     return loss
 
@@ -104,7 +118,7 @@ def train(models, method, criterion, optimizers, schedulers, dataloaders, num_ep
         loss = train_epoch(models, method, criterion, optimizers, dataloaders, epoch, epoch_loss)
 
         schedulers['backbone'].step()
-        if method == 'lloss':
+        if method == 'lloss' or method == 'lloss_mse':
             schedulers['module'].step()
 
         if False and epoch % 20  == 7:

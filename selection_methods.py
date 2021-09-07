@@ -165,6 +165,23 @@ def get_uncertainty(models, unlabeled_loader):
     
     return uncertainty.cpu()
 
+
+def get_entropy(models, unlabeled_loader):
+    models['backbone'].eval()
+    with torch.cuda.device(CUDA_VISIBLE_DEVICES):
+        uncertainty = torch.tensor([]).cuda()
+
+    with torch.no_grad():
+        for inputs, _, _ in unlabeled_loader:
+            with torch.cuda.device(CUDA_VISIBLE_DEVICES):
+                inputs = inputs.cuda()
+            _, outf, features = models['backbone'](inputs)
+            entropy = outf.entropy()
+            entropy = entropy.view(entropy.size(0))
+            uncertainty = torch.cat((uncertainty, entropy), 0)
+    
+    return uncertainty.cpu()
+
 def get_features(models, unlabeled_loader):
     models['backbone'].eval()
     with torch.cuda.device(CUDA_VISIBLE_DEVICES):
@@ -278,7 +295,7 @@ def query_samples(model, method, data_unlabeled, subset, labeled_set, cycle, arg
 
         arg = get_kcg(model, ADDENDUM*(cycle+1), unlabeled_loader)
 
-    if method == 'lloss':
+    if method == 'lloss' or method == 'lloss_mse':
         # Create unlabeled dataloader for the unlabeled subset
         unlabeled_loader = DataLoader(data_unlabeled, batch_size=BATCH, 
                                     sampler=SubsetSequentialSampler(subset), 
@@ -287,6 +304,16 @@ def query_samples(model, method, data_unlabeled, subset, labeled_set, cycle, arg
         # Measure uncertainty of each data points in the subset
         uncertainty = get_uncertainty(model, unlabeled_loader)
         arg = np.argsort(uncertainty)        
+    
+    if method == 'entropy':
+        # Create unlabeled dataloader for the unlabeled subset
+        unlabeled_loader = DataLoader(data_unlabeled, batch_size=BATCH, 
+                                    sampler=SubsetSequentialSampler(subset), 
+                                    pin_memory=True)
+
+        # Measure uncertainty of each data points in the subset
+        uncertainty = get_entropy(model, unlabeled_loader)
+        arg = np.argsort(uncertainty)     
 
     if method == 'VAAL':
         # Create unlabeled dataloader for the unlabeled subset
