@@ -107,7 +107,7 @@ if __name__ == '__main__':
                     loss_module = LossNet().cuda()
 
             models      = {'backbone': resnet18}
-            if method =='lloss':
+            if method =='lloss' or method == 'lloss_mse':
                 models = {'backbone': resnet18, 'module': loss_module}
             torch.backends.cudnn.benchmark = True
             
