@@ -58,7 +58,7 @@ if __name__ == '__main__':
     np.random.seed(seed)
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
-    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.deterministic = False
     torch.manual_seed(seed)
 
     method = args.method_type
@@ -112,7 +112,7 @@ if __name__ == '__main__':
         models      = {'backbone': resnet18}
         if method =='lloss' or method == 'lloss_mse':
             models = {'backbone': resnet18, 'module': loss_module}
-        torch.backends.cudnn.benchmark = True
+        torch.backends.cudnn.benchmark = False
 
         for cycle in range(CYCLES):
             
