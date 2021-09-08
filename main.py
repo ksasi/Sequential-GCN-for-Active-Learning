@@ -142,13 +142,13 @@ if __name__ == '__main__':
             optim_backbone = optim.SGD(models['backbone'].parameters(), lr=LR, 
                 momentum=MOMENTUM, weight_decay=WDECAY)
  
-            sched_backbone = lr_scheduler.MultiStepLR(optim_backbone, milestones=MILESTONES)
+            sched_backbone = lr_scheduler.MultiStepLR(optim_backbone, milestones=MILESTONES, verbose = True)
             optimizers = {'backbone': optim_backbone}
             schedulers = {'backbone': sched_backbone}
             if method == 'lloss' or method == 'lloss_mse':
                 optim_module   = optim.SGD(models['module'].parameters(), lr=LR, 
                     momentum=MOMENTUM, weight_decay=WDECAY)
-                sched_module   = lr_scheduler.MultiStepLR(optim_module, milestones=MILESTONES)
+                sched_module   = lr_scheduler.MultiStepLR(optim_module, milestones=MILESTONES, verbose = True)
                 optimizers = {'backbone': optim_backbone, 'module': optim_module}
                 schedulers = {'backbone': sched_backbone, 'module': sched_module}
             
@@ -172,6 +172,7 @@ if __name__ == '__main__':
             listd = list(torch.tensor(subset)[arg][:-ADDENDUM].numpy()) 
             unlabeled_set = listd + unlabeled_set[SUBSET:]
             print(len(labeled_set), min(labeled_set), max(labeled_set), len(unlabeled_set))
+            print(LR)
             # Create a new dataloader for the updated labeled dataset
             dataloaders['train'] = DataLoader(data_train, batch_size=BATCH, 
                                             sampler=SubsetRandomSampler(labeled_set), 
