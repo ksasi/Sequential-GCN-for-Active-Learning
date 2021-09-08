@@ -115,9 +115,10 @@ class ResNet(nn.Module):
         out4 = self.layer4(out3)
         out = F.avg_pool2d(out4, 4)
         outf = out.view(out.size(0), -1)
-        # outl = self.linear(outf)
+        outl = self.linear(outf)
         out = self.linear(outf)
-        return out, outf, [out1, out2, out3, out4]
+        ##return out, outf, [out1, out2, out3, out4]
+        return out, outl, [out1, out2, out3, out4]
 
 class ResNetfm(nn.Module):
     def __init__(self, block, num_blocks, num_classes=10):

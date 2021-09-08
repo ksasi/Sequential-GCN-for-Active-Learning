@@ -51,6 +51,16 @@ args = parser.parse_args()
 # Main
 if __name__ == '__main__':
 
+
+    seed = 42
+    random.seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    np.random.seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.manual_seed(seed)
+
     method = args.method_type
     methods = ['Random', 'UncertainGCN', 'CoreGCN', 'CoreSet', 'lloss','VAAL','lloss_mse','entropy']
     datasets = ['cifar10', 'cifar100', 'fashionmnist','svhn']
