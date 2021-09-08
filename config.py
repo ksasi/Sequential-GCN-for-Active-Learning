@@ -11,8 +11,8 @@ ADDENDUM  = 1000 # K
 MARGIN = 1.0 # xi
 WEIGHT = 1.0 # lambda
 
-#TRIALS = 5
-TRIALS = 1
+TRIALS = 5
+#TRIALS = 1
 CYCLES = 5
 
 EPOCH = 200
@@ -20,7 +20,8 @@ EPOCH_GCN = 200
 LR = 1e-1
 LR_GCN = 1e-3
 MILESTONES = [160, 240]
-EPOCHL = 120#20 #120 # After 120 epochs, stop 
+#EPOCHL = 120#20 #120 # After 120 epochs, stop 
+EPOCHL = 160
 EPOCHV = 100 # VAAL number of epochs
 
 MOMENTUM = 0.9
