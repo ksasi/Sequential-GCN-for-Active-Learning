@@ -85,7 +85,6 @@ def train_epoch(models, method, criterion, optimizers, dataloaders, epoch, epoch
             m_backbone_loss = torch.sum(target_loss) / target_loss.size(0)        
             loss            = m_backbone_loss + WEIGHT * m_module_loss 
         elif method == 'lloss_mse':
-            WEIGHT = 0.1
             if epoch > epoch_loss:
                 features[0] = features[0].detach()
                 features[1] = features[1].detach()
@@ -98,7 +97,7 @@ def train_epoch(models, method, criterion, optimizers, dataloaders, epoch, epoch
             loss_mse = torch.nn.MSELoss()
             m_module_loss   = loss_mse(pred_loss, target_loss)/1
             m_backbone_loss = torch.sum(target_loss) / target_loss.size(0)        
-            loss            = m_backbone_loss + WEIGHT * m_module_loss 
+            loss            = m_backbone_loss + 0.1 * m_module_loss 
         else:
             m_backbone_loss = torch.sum(target_loss) / target_loss.size(0)        
             loss            = m_backbone_loss
