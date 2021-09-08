@@ -8,7 +8,7 @@ from torch.nn.modules.module import Module
 
 
 class LossNet(nn.Module):
-    def __init__(self, feature_sizes=[32, 16, 8, 4], num_channels=[64, 128, 256, 512], interm_dim=128*2):
+    def __init__(self, feature_sizes=[32, 16, 8, 4], num_channels=[64, 128, 256, 512], interm_dim=128):
         super(LossNet, self).__init__()
         
         self.GAP1 = nn.AvgPool2d(feature_sizes[0])

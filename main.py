@@ -171,7 +171,7 @@ if __name__ == '__main__':
             labeled_set += list(torch.tensor(subset)[arg][-ADDENDUM:].numpy())
             listd = list(torch.tensor(subset)[arg][:-ADDENDUM].numpy()) 
             unlabeled_set = listd + unlabeled_set[SUBSET:]
-            print(len(labeled_set), min(labeled_set), max(labeled_set))
+            print(len(labeled_set), min(labeled_set), max(labeled_set), len(unlabeled_set))
             # Create a new dataloader for the updated labeled dataset
             dataloaders['train'] = DataLoader(data_train, batch_size=BATCH, 
                                             sampler=SubsetRandomSampler(labeled_set), 
