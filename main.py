@@ -98,13 +98,29 @@ if __name__ == '__main__':
         test_loader  = DataLoader(data_test, batch_size=BATCH)
         dataloaders  = {'train': train_loader, 'test': test_loader}
 
+        # Model - create new instance for every cycle so that it resets
+        with torch.cuda.device(CUDA_VISIBLE_DEVICES):
+            if args.dataset == "fashionmnist":
+                resnet18    = resnet.ResNet18fm(num_classes=NO_CLASSES).cuda()
+            else:
+                #resnet18    = vgg11().cuda() 
+                resnet18    = resnet.ResNet18(num_classes=NO_CLASSES).cuda()
+            if method == 'lloss' or method == 'lloss_mse':
+                #loss_module = LossNet(feature_sizes=[16,8,4,2], num_channels=[128,128,256,512]).cuda()
+                loss_module = LossNet().cuda()
+
+        models      = {'backbone': resnet18}
+        if method =='lloss' or method == 'lloss_mse':
+            models = {'backbone': resnet18, 'module': loss_module}
+        torch.backends.cudnn.benchmark = True
+
         for cycle in range(CYCLES):
             
             # Randomly sample 10000 unlabeled data points
             if not args.total:
                 random.shuffle(unlabeled_set)
                 subset = unlabeled_set[:SUBSET]
-
+            '''
             # Model - create new instance for every cycle so that it resets
             with torch.cuda.device(CUDA_VISIBLE_DEVICES):
                 if args.dataset == "fashionmnist":
@@ -120,7 +136,7 @@ if __name__ == '__main__':
             if method =='lloss' or method == 'lloss_mse':
                 models = {'backbone': resnet18, 'module': loss_module}
             torch.backends.cudnn.benchmark = True
-            
+            '''
             # Loss, criterion and scheduler (re)initialization
             criterion      = nn.CrossEntropyLoss(reduction='none')
             optim_backbone = optim.SGD(models['backbone'].parameters(), lr=LR, 
