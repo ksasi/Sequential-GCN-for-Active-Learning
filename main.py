@@ -77,6 +77,8 @@ if __name__ == '__main__':
         CYCLES = 1
     else:
         CYCLES = args.cycles
+    if args.dataset == 'cifar100':
+        TRIALS = 2
     for trial in range(TRIALS):
 
         # Load training and testing dataset
