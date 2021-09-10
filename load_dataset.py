@@ -48,19 +48,36 @@ def load_dataset(dataset):
     ######normalization:
     ######mean: [0.4914, 0.4822, 0.4465]
     ######std: [0.247, 0.243, 0.261]
-    train_transform = T.Compose([
-        T.RandomCrop(size=32, padding=4),
-        T.RandomHorizontalFlip(),
-        T.ToTensor(),
-        ########T.Normalize([0.4914, 0.4822, 0.4465], [0.2023, 0.1994, 0.2010]) # T.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)) # CIFAR-100
-        T.Normalize([0.4914, 0.4822, 0.4465], [0.247, 0.243, 0.261])
-    ])
+    if dataset == 'cifar10':
+        train_transform = T.Compose([
+            T.RandomCrop(size=32, padding=4),
+            T.RandomHorizontalFlip(),
+            T.ToTensor(),
+            ########T.Normalize([0.4914, 0.4822, 0.4465], [0.2023, 0.1994, 0.2010]) # T.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)) # CIFAR-100
+            T.Normalize([0.4914, 0.4822, 0.4465], [0.247, 0.243, 0.261])
+        ])
 
-    test_transform = T.Compose([
-        T.ToTensor(),
-        ########T.Normalize([0.4914, 0.4822, 0.4465], [0.2023, 0.1994, 0.2010]) # T.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)) # CIFAR-100
-        T.Normalize([0.4914, 0.4822, 0.4465], [0.247, 0.243, 0.261])
-    ])
+        test_transform = T.Compose([
+            T.ToTensor(),
+            ########T.Normalize([0.4914, 0.4822, 0.4465], [0.2023, 0.1994, 0.2010]) # T.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)) # CIFAR-100
+            T.Normalize([0.4914, 0.4822, 0.4465], [0.247, 0.243, 0.261])
+        ])
+
+    if dataset == 'cifar100':
+        train_transform = T.Compose([
+            T.RandomCrop(size=32, padding=4),
+            T.RandomHorizontalFlip(),
+            T.ToTensor(),
+            ########T.Normalize([0.4914, 0.4822, 0.4465], [0.2023, 0.1994, 0.2010]) # T.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)) # CIFAR-100
+            T.Normalize([0.5071, 0.4867, 0.4408], [0.2675, 0.2565, 0.2761])
+        ])
+
+        test_transform = T.Compose([
+            T.ToTensor(),
+            ########T.Normalize([0.4914, 0.4822, 0.4465], [0.2023, 0.1994, 0.2010]) # T.Normalize((0.5071, 0.4867, 0.4408), (0.2675, 0.2565, 0.2761)) # CIFAR-100
+            T.Normalize([0.5071, 0.4867, 0.4408], [0.2675, 0.2565, 0.2761])
+        ])
+
 
 
     if dataset == 'cifar10': 
