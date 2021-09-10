@@ -17,7 +17,7 @@ CYCLES = 5
 
 EPOCH = 200
 EPOCH_GCN = 200
-LR = 2e-1
+LR = 1e-1
 LR_GCN = 1e-3
 MILESTONES = [140, 160, 240]
 EPOCHL = 120#20 #120 # After 120 epochs, stop 
