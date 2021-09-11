@@ -166,14 +166,14 @@ if __name__ == '__main__':
             optim_backbone = optim.SGD(models['backbone'].parameters(), lr=LR, 
                 momentum=MOMENTUM, weight_decay=WDECAY)
  
-            sched_backbone = lr_scheduler.MultiStepLR(optim_backbone, milestones=MILESTONES, verbose = False)
+            sched_backbone = lr_scheduler.MultiStepLR(optim_backbone, milestones=MILESTONES)
             ####sched_backbone = lr_scheduler.CosineAnnealingLR(optim_backbone, args.no_of_epochs, verbose = False)
             optimizers = {'backbone': optim_backbone}
             schedulers = {'backbone': sched_backbone}
             if method == 'lloss' or method == 'lloss_mse':
                 optim_module   = optim.SGD(models['module'].parameters(), lr=LR, 
                     momentum=MOMENTUM, weight_decay=WDECAY)
-                sched_module   = lr_scheduler.MultiStepLR(optim_module, milestones=MILESTONES, verbose = False)
+                sched_module   = lr_scheduler.MultiStepLR(optim_module, milestones=MILESTONES)
                 ####sched_module   = lr_scheduler.CosineAnnealingLR(optim_module, args.no_of_epochs, verbose = False)
                 optimizers = {'backbone': optim_backbone, 'module': optim_module}
                 schedulers = {'backbone': sched_backbone, 'module': sched_module}
