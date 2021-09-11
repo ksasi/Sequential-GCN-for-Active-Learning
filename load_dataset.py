@@ -110,9 +110,9 @@ def load_dataset(dataset):
         adden = ADDENDUM
         no_train = NUM_TRAIN
     elif dataset == 'cifar100':
-        data_train = CIFAR100('../cifar100', train=True, download=True, transform=train_transform)
+        data_train = CIFAR100('../cifar100', train=True, download=False, transform=train_transform)
         data_unlabeled = MyDataset(dataset, True, test_transform)
-        data_test  = CIFAR100('../cifar100', train=False, download=True, transform=test_transform)
+        data_test  = CIFAR100('../cifar100', train=False, download=False, transform=test_transform)
         NO_CLASSES = 100
         adden = 2000
         no_train = NUM_TRAIN
