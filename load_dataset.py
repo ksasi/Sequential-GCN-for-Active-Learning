@@ -8,16 +8,16 @@ class MyDataset(Dataset):
     def __init__(self, dataset_name, train_flag, transf):
         self.dataset_name = dataset_name
         if self.dataset_name == "cifar10":
-            self.cifar10 = CIFAR10('../cifar10', train=train_flag, 
+            self.cifar10 = CIFAR10('/workspace/data/cifar10', train=train_flag, 
                                     download=True, transform=transf)
         if self.dataset_name == "cifar100":
-            self.cifar100 = CIFAR100('../cifar100', train=train_flag, 
-                                    download=False, transform=transf)
+            self.cifar100 = CIFAR100('/workspace/data/cifar100', train=train_flag, 
+                                    download=True, transform=transf)
         if self.dataset_name == "fashionmnist":
-            self.fmnist = FashionMNIST('../fashionMNIST', train=train_flag, 
+            self.fmnist = FashionMNIST('/workspace/data/fashionMNIST', train=train_flag, 
                                     download=True, transform=transf)
         if self.dataset_name == "svhn":
-            self.svhn = SVHN('../svhn', split="train", 
+            self.svhn = SVHN('/workspace/data/svhn', split="train", 
                                     download=True, transform=transf)
 
 
@@ -81,14 +81,14 @@ def load_dataset(dataset):
 
 
     if dataset == 'cifar10': 
-        data_train = CIFAR10('../cifar10', train=True, download=True, transform=train_transform)
+        data_train = CIFAR10('/workspace/data/cifar10', train=True, download=True, transform=train_transform)
         data_unlabeled = MyDataset(dataset, True, test_transform)
-        data_test  = CIFAR10('../cifar10', train=False, download=True, transform=test_transform)
+        data_test  = CIFAR10('/workspace/data/cifar10', train=False, download=True, transform=test_transform)
         NO_CLASSES = 10
         adden = ADDENDUM
         no_train = NUM_TRAIN
     elif dataset == 'cifar10im': 
-        data_train = CIFAR10('../cifar10', train=True, download=True, transform=train_transform)
+        data_train = CIFAR10('/workspace/data/cifar10', train=True, download=True, transform=train_transform)
         #data_unlabeled   = CIFAR10('../cifar10', train=True, download=True, transform=test_transform)
         targets = np.array(data_train.targets)
         #NUM_TRAIN = targets.shape[0]
@@ -105,31 +105,31 @@ def load_dataset(dataset):
         data_unlabeled = MyDataset(dataset[:-2], True, test_transform)
         data_unlabeled.cifar10.targets = targets[imb_class_idx]
         data_unlabeled.cifar10.data = data_unlabeled.cifar10.data[imb_class_idx]
-        data_test  = CIFAR10('../cifar10', train=False, download=True, transform=test_transform)
+        data_test  = CIFAR10('/workspace/data/cifar10', train=False, download=True, transform=test_transform)
         NO_CLASSES = 10
         adden = ADDENDUM
         no_train = NUM_TRAIN
     elif dataset == 'cifar100':
-        data_train = CIFAR100('../cifar100', train=True, download=False, transform=train_transform)
+        data_train = CIFAR100('/workspace/data/cifar100', train=True, download=True, transform=train_transform)
         data_unlabeled = MyDataset(dataset, True, test_transform)
-        data_test  = CIFAR100('../cifar100', train=False, download=False, transform=test_transform)
+        data_test  = CIFAR100('/workspace/data/cifar100', train=False, download=True, transform=test_transform)
         NO_CLASSES = 100
         adden = 2000
         no_train = NUM_TRAIN
     elif dataset == 'fashionmnist':
-        data_train = FashionMNIST('../fashionMNIST', train=True, download=True, 
+        data_train = FashionMNIST('/workspace/data/fashionMNIST', train=True, download=True, 
                                     transform=T.Compose([T.ToTensor()]))
         data_unlabeled = MyDataset(dataset, True, T.Compose([T.ToTensor()]))
-        data_test  = FashionMNIST('../fashionMNIST', train=False, download=True, 
+        data_test  = FashionMNIST('/workspace/data/fashionMNIST', train=False, download=True, 
                                     transform=T.Compose([T.ToTensor()]))
         NO_CLASSES = 10
         adden = ADDENDUM
         no_train = NUM_TRAIN
     elif dataset == 'svhn':
-        data_train = SVHN('../svhn', split='train', download=True, 
+        data_train = SVHN('/workspace/data/svhn', split='train', download=True, 
                                     transform=T.Compose([T.ToTensor()]))
         data_unlabeled = MyDataset(dataset, True, T.Compose([T.ToTensor()]))
-        data_test  = SVHN('../svhn', split='test', download=True, 
+        data_test  = SVHN('/workspace/data/svhn', split='test', download=True, 
                                     transform=T.Compose([T.ToTensor()]))
         NO_CLASSES = 10
         adden = ADDENDUM
