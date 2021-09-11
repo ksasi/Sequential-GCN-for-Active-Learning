@@ -12,7 +12,7 @@ class MyDataset(Dataset):
                                     download=True, transform=transf)
         if self.dataset_name == "cifar100":
             self.cifar100 = CIFAR100('../cifar100', train=train_flag, 
-                                    download=True, transform=transf)
+                                    download=False, transform=transf)
         if self.dataset_name == "fashionmnist":
             self.fmnist = FashionMNIST('../fashionMNIST', train=train_flag, 
                                     download=True, transform=transf)
