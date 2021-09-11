@@ -64,8 +64,8 @@ if __name__ == '__main__':
     method = args.method_type
     methods = ['Random', 'UncertainGCN', 'CoreGCN', 'CoreSet', 'lloss','VAAL','lloss_mse','entropy']
     datasets = ['cifar10', 'cifar100', 'fashionmnist','svhn']
-    assert method in methods, 'No method %s! Try options %s'%(method, methods)
-    assert args.dataset in datasets, 'No dataset %s! Try options %s'%(args.dataset, datasets)
+    ###assert method in methods, 'No method %s! Try options %s'%(method, methods)
+    ###assert args.dataset in datasets, 'No dataset %s! Try options %s'%(args.dataset, datasets)
     '''
     method_type: 'Random', 'UncertainGCN', 'CoreGCN', 'CoreSet', 'lloss','VAAL','lloss_mse'
     '''
